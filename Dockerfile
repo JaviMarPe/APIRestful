@@ -25,3 +25,10 @@ COPY src/ /var/www/html
 
 # Cambiar el propietario del directorio
 RUN chown -R www-data:www-data /var/www/html
+
+# Asegúrate de que el usuario www-data tenga el UID y GID correctos
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+
+# Establece los permisos correctos para los directorios de Laravel
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
