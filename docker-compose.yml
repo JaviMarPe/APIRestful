@@ -7,7 +7,9 @@ services:
     image: php:8.2-apache
     ports:
       - "80:80"
-    user: "${UID}:${GID}"
+    environment:
+      - UID=${UID}
+      - GID=${GID}
     volumes:
       - ./src:/var/www/html
     depends_on:
