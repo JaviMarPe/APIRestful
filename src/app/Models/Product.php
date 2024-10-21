@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
 
 class Product extends Model
 {
@@ -23,5 +24,17 @@ class Product extends Model
 
     public function estaDisponible(){
         return $this->status == Product::PRODUCTO_DISPONIBLE;
+    }
+
+    public function categories(){
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function transactions(){
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function seller(){
+        return $this->belongsTo(Seller::class);
     }
 }

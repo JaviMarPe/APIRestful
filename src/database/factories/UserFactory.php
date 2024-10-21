@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,6 +30,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'verified' => $verificado = fake()->randomElement([User::USUARIO_VERIFICADO, User::USUARIO_NO_VERIFICADO]),
+            'verification_token' => $verificado == 'USUARIO_VERIFICADO' ? null : User::generarVerificationToken(),
+            'admin' => fake()->randomElement([User::USUARIO_REGULAR, User::USUARIO_ADMIN]),
         ];
     }
 
