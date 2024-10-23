@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Buyer\BuyerController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +24,15 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
+/*Route::controller(UserController::class)->group(function () {
+    Route::get('/users/{id}', 'show');
+    Route::post('/users', 'store');
+});*/
+
 /*
     Buyers
 */
-Route::resource('buyers', 'Buyer\BuyerController', [ 'only' => ['index', 'show']]);
+Route::resource('buyers', BuyerController::class)->only(['index', 'show']);
 
 /*
     Categories
@@ -50,4 +57,4 @@ Route::resource('sellers', 'Seller\SellerController', [ 'only' => ['index', 'sho
 /*
     Users
 */
-Route::resource('users', 'User\UserController', [ 'except' => ['create', 'edit']]);
+Route::resource('users', UserController::class)->except(['create', 'edit']);
