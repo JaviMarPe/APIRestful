@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -59,7 +59,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return $this->errorResponse($th->error_log, 423);
         } catch (ValidationException $e) {
-            return $this->errorResponse($e->errors(), 422);
+            //return $this->errorResponse($e->error_log(), 422);
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred while creating the user.', 500);
         }
@@ -133,7 +133,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return $this->errorResponse($th->error_log, 423);
         } catch (ValidationException $e) {
-            return $this->errorResponse($e->errors(), 422);
+            //return $this->errorResponse($e->errors(), 422);
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred while creating the user.', 500);
         }
