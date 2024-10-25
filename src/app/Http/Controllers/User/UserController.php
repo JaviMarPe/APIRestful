@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\ApiController;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -68,9 +69,8 @@ class UserController extends ApiController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user): JsonResponse
     {
-        $user = User::findOrFail($id);
         return $this->successResponse($user, 200);
     }
 
@@ -85,11 +85,9 @@ class UserController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
         try {
-            
-            $user = User::findOrFail($id);
 
             $validator = Validator::make($request->all(), [
                 'email' => ['email', 'unique:users'],
@@ -142,12 +140,8 @@ class UserController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //$user = User::destroy($id);
-
-        $user = User::findOrFail($id);
-
         //$user->products()->delete();
 
         $user->delete();
