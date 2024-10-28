@@ -34,6 +34,7 @@ trait ApiResponser
         return response()->json([
             'status' => 'Error',
             'message' => $message,
+            'code' => $code,
             'data' => $data
         ], $code);
     }

@@ -1,10 +1,15 @@
 <?php
 
 use App\Http\Controllers\Buyer\BuyerController;
+use App\Http\Controllers\Buyer\BuyerProductsController;
+use App\Http\Controllers\Buyer\BuyerSellerController;
+use App\Http\Controllers\Buyer\BuyerTransactionController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Seller\SellerController;
+use App\Http\Controllers\Transaction\TransactionCategoryController;
 use App\Http\Controllers\Transaction\TransactionController;
+use App\Http\Controllers\Transaction\TransactionSellerController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,41 +29,58 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-/*Route::get('/', function (Request $request) {
-    return view('welcome');
-});*/
-
-/*Route::controller(UserController::class)->group(function () {
-    Route::get('/users/{id}', 'show');
-    Route::post('/users', 'store');
-});*/
-
 /*
-    Buyers
+    Users
 */
-Route::resource('buyers', BuyerController::class)->only(['index', 'show']);
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users', 'index');
+    Route::get('/users/{user}', 'show');
+    Route::post('/users', 'store');
+    Route::patch('/users/{user}', 'update');
+    Route::delete('/users/{user}', 'destroy');
+});
 
 /*
     Categories
 */
-Route::resource('categories', CategoryController::class)->except(['create', 'edit']);
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/categories', 'index');
+    Route::get('/categories/{category}', 'show');
+    Route::post('/categories', 'store');
+    Route::patch('/categories/{category}', 'update');
+    Route::delete('/categories/{category}', 'destroy');
+});
 
 /*
     Products
 */
-Route::resource('products', ProductController::class)->only(['index', 'show']);
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/products', 'index');
+    Route::get('/products/{product}', 'show');
+});
 
 /*
     Transactions
 */
-Route::resource('transactions', TransactionController::class)->only(['index', 'show']);
+Route::controller(TransactionController::class)->group(function () {
+    Route::get('/transactions', 'index');
+    Route::get('/transactions/{transaction}', 'show');
+});
+Route::get('/transactions/{transaction}/categories', [TransactionCategoryController::class, 'index']);
+Route::get('/transactions/{transaction}/sellers', [TransactionSellerController::class, 'index']);
+
+/*
+    Buyers
+*/
+Route::controller(BuyerController::class)->group(function () {
+    Route::get('/buyers', 'index');
+    Route::get('/buyers/{buyer}', 'show');
+});
+Route::get('/buyers/{buyer}/transactions', [BuyerTransactionController::class, 'index']);
+Route::get('/buyers/{buyer}/products', [BuyerProductsController::class, 'index']);
+Route::get('/buyers/{buyer}/sellers', [BuyerSellerController::class, 'index']);
 
 /*
     Sellers
 */
 Route::resource('sellers', SellerController::class)->only(['index', 'show']);
-
-/*
-    Users
-*/
-Route::resource('users', UserController::class)->except(['create', 'edit']);

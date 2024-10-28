@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class Transaction extends Model
 {
@@ -24,7 +25,7 @@ class Transaction extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function buyer(): BelongsTo{
-        return $this->belongsTo(Buyer::class, 'foreignKey');
+        return $this->belongsTo(Buyer::class);
     }
     
     /**
@@ -34,6 +35,7 @@ class Transaction extends Model
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'foreign_key');
+        Log::info('Accessing product relation for transaction: ' . $this->id);
+        return $this->belongsTo(Product::class);
     }
 }

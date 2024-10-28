@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -69,8 +70,9 @@ class UserController extends ApiController
     /**
      * Display the specified resource.
      */
-    public function show(User $user): JsonResponse
+    public function show(User $user)
     {
+        Log::info('User retrieved', ['user' => $user]);
         return $this->successResponse($user, 200);
     }
 
@@ -142,10 +144,8 @@ class UserController extends ApiController
      */
     public function destroy(User $user)
     {
-        //$user->products()->delete();
-
         $user->delete();
 
-        return response()->json(['data' => $user], 201);
+        return $this->successResponse($user, 201);
     }
 }
