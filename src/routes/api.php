@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\Buyer\BuyerCategoryController;
 use App\Http\Controllers\Buyer\BuyerController;
 use App\Http\Controllers\Buyer\BuyerProductsController;
 use App\Http\Controllers\Buyer\BuyerSellerController;
 use App\Http\Controllers\Buyer\BuyerTransactionController;
+use App\Http\Controllers\Category\CategoryBuyerController;
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Category\CategoryProductController;
+use App\Http\Controllers\Category\CategorySellerController;
+use App\Http\Controllers\Category\CategoryTransactionController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Transaction\TransactionCategoryController;
@@ -50,6 +55,10 @@ Route::controller(CategoryController::class)->group(function () {
     Route::patch('/categories/{category}', 'update');
     Route::delete('/categories/{category}', 'destroy');
 });
+Route::get('/categories/{category}/products', [CategoryProductController::class, 'index']);
+Route::get('/categories/{category}/sellers', [CategorySellerController::class, 'index']);
+Route::get('/categories/{category}/transactions', [CategoryTransactionController::class, 'index']);
+Route::get('/categories/{category}/buyers', [CategoryBuyerController::class, 'index']);
 
 /*
     Products
@@ -79,6 +88,7 @@ Route::controller(BuyerController::class)->group(function () {
 Route::get('/buyers/{buyer}/transactions', [BuyerTransactionController::class, 'index']);
 Route::get('/buyers/{buyer}/products', [BuyerProductsController::class, 'index']);
 Route::get('/buyers/{buyer}/sellers', [BuyerSellerController::class, 'index']);
+Route::get('/buyers/{buyer}/categories', [BuyerCategoryController::class, 'index']);
 
 /*
     Sellers
