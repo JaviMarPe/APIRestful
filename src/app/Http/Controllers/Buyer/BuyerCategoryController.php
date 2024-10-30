@@ -17,7 +17,8 @@ class BuyerCategoryController extends ApiController
             return $this->errorResponse('This buyer '.$buyer->name.' does not have any transaction', 404);
         }
 
-        $categories = $buyer->transactions()->with('product.categories')
+        $categories = $buyer->transactions()
+                    ->with('product.categories')
                     ->get()
                     ->pluck('product.categories')//solo te muestra los seller, los productos y las transacciones las "elimina" de la respuesta
                     ->collapse() //transforma un array de varios niveles en una sola lista de colecciones

@@ -16,7 +16,7 @@ class CategoryBuyerController extends ApiController
         /*En este caso, al haber varias transacciones dentro de los productor(relacion hasMany) entonces tenemos que hacer primero 
         el pluck de la coleccion de transacciones y luego de buyer*/
         $buyers = $category->products()
-                ->has('transactions') //Si los productos no tienen transacciones no sera incluidos en la respuesta
+                ->whereHas('transactions') //Si los productos no tienen transacciones no sera incluidos en la respuesta
                 ->with('transactions.buyer')
                 ->get()
                 ->pluck('transactions')
@@ -26,7 +26,7 @@ class CategoryBuyerController extends ApiController
                 ->values();
 
         if($buyers->isEmpty()){
-            return $this->errorResponse('Not sellers found for this Category', 404);
+            return $this->errorResponse('Not buyers found for this Category', 404);
         }
 
         return $this->successResponse($buyers, 200);

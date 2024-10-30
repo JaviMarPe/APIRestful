@@ -17,7 +17,8 @@ class BuyerSellerController extends ApiController
             return $this->errorResponse('This buyer '.$buyer->name.' does not have any transaction', 404);
         }
 
-        $sellers = $buyer->transactions()->with('product.seller')
+        $sellers = $buyer->transactions()
+                    ->with('product.seller')
                     ->get()
                     ->pluck('product.seller')//solo te muestra los seller, los productos y las transacciones las "elimina" de la respuesta
                     ->unique('id')//Para que no se repitan

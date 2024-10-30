@@ -36,7 +36,7 @@ class UserController extends ApiController
     public function store(Request $request)
     {
         try {
-            //code...
+     
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'email' => ['required', 'email', 'unique:users'],
@@ -146,6 +146,6 @@ class UserController extends ApiController
     {
         $user->delete();
 
-        return $this->successResponse($user, 201);
+        return $this->successResponse($user);
     }
 }

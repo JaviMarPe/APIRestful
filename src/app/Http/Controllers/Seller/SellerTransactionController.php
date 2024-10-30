@@ -13,6 +13,17 @@ class SellerTransactionController extends ApiController
      */
     public function index(Seller $seller)
     {
-        //
+        $transactions = $seller->products()
+                ->whereHas('transactions')
+                ->with('transactions')
+                ->get()
+                ->pluck('transactions')
+                ->collapse();
+
+        if($transactions->isEmpty()){
+            return $this->errorResponse('Not transactions found for this Seller', 404);
+        }
+
+        return $this->successResponse($transactions, 200);
     }
 }
