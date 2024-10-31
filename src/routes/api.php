@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Product\ProductBuyerTransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,3 +42,11 @@ Route::group(['prefix' => 'sellers/{seller}'], function () {
     Route::apiResource('buyers', 'App\Http\Controllers\Seller\SellerBuyerController')->only(['index']);
     Route::apiResource('products', 'App\Http\Controllers\Seller\SellerProductController')->except(['edit', 'create', 'show']);
 });
+
+Route::group(['prefix' => 'products/{product}'], function () {
+    Route::apiResource('transactions', 'App\Http\Controllers\Product\ProductTransactionController')->only(['index']);
+    Route::apiResource('buyers', 'App\Http\Controllers\Product\ProductBuyerController')->only(['index']);
+    Route::apiResource('categories', 'App\Http\Controllers\Product\ProductCategoryController')->only(['index', 'update', 'destroy']);
+});
+
+Route::post('products/{product}/buyers/{buyer}/transactions', [ProductBuyerTransactionController::class, 'store']);

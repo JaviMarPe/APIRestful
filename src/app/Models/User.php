@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 
@@ -73,6 +74,7 @@ class User extends Authenticatable
     }
 
     public function esVerificado(){
+        Log::info("Function esVerificado: User Verified ".$this->verified);
         return $this->verified == User::USUARIO_VERIFICADO;
     }
 

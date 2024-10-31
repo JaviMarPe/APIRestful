@@ -35,6 +35,10 @@ class SellerProductController extends ApiController
     public function store(Request $request, User $user)
     {
         try {
+
+            if (!$user->esVerificado()) {
+                return $this->errorResponse('Seller must be verified user', 409);
+            }
             
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
