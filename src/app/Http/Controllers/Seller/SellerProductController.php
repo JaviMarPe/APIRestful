@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
@@ -32,11 +33,11 @@ class SellerProductController extends ApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request, User $seller)
     {
         try {
 
-            if (!$user->esVerificado()) {
+            if (!$seller->esVerificado()) {
                 return $this->errorResponse('Seller must be verified user', 409);
             }
             
@@ -53,8 +54,8 @@ class SellerProductController extends ApiController
 
             $data = $request->all();
             $data['status'] = Product::PRODUCTO_NO_DISPONIBLE;
-            $data['image'] = '1.jpg';
-            $data['seller_id'] = $user->id;
+            $data['image'] = $request->image->store('');
+            $data['seller_id'] = $seller->id;
 
             $newProduct = Product::create($data);
     
@@ -96,6 +97,12 @@ class SellerProductController extends ApiController
                 }
             }
 
+            //Borramos la anterior imagen asociada y añadimos la nueva
+            if($request->hasFile('image')){
+                Storage::delete($product->image);
+                $product->image = $request->image->store('');
+            }
+
             if($product->isClean()){
                 return response()->json(['error' => 'Se debe especificar al menos un valor diferente para actualizar'], 422);
             } 
@@ -114,6 +121,8 @@ class SellerProductController extends ApiController
     public function destroy(Seller $seller, Product $product)
     {
         $this->verifiedSeller($seller, $product);
+
+        Storage::delete($product->image);
 
         $product->delete();
 
