@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Product\ProductBuyerTransactionController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,3 +51,6 @@ Route::group(['prefix' => 'products/{product}'], function () {
 });
 
 Route::post('products/{product}/buyers/{buyer}/transactions', [ProductBuyerTransactionController::class, 'store']);
+
+Route::get('users/verify/{token}',  [UserController::class, 'verify'])->name('verify');
+Route::get('users/{user}/resend',  [UserController::class, 'resend'])->name('resend');

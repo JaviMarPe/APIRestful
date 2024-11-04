@@ -25,6 +25,12 @@ class DatabaseSeeder extends Seeder
         Transaction::truncate();
         DB::table('category_product')->truncate();
 
+        //Con esto no se van a activar eventos como el envio de correos cuando generemos Datos ficticios
+        User::flushEventListeners();
+        Category::flushEventListeners();
+        Product::flushEventListeners();
+        Transaction::flushEventListeners();
+
         $quantityUsers = 1000;
         $quantityCategories = 30;
         $quantityProducts = 1000;

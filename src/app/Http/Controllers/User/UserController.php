@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\ApiController;
+use App\Mail\UserCreated;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -36,6 +38,8 @@ class UserController extends ApiController
     public function store(Request $request)
     {
         try {
+
+            Log::info("store function request = ".json_encode($request->all()));
      
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -44,6 +48,7 @@ class UserController extends ApiController
             ]);
 
             if ($validator->fails()) {
+                Log::info("Validation fails = ".$validator->errors());
                 return $this->errorResponse($validator->errors(), 420);
             }
 
@@ -55,13 +60,15 @@ class UserController extends ApiController
                 'verification_token' => User::generarVerificationToken(),
                 'admin' => User::USUARIO_REGULAR,
             ]);
+
+            Log::info("store function new user = ".json_encode($newUser));
     
             return $this->successResponse($newUser, 201);
 
         } catch (\Throwable $th) {
-            return $this->errorResponse($th->error_log, 423);
+            return $this->errorResponse($th->getMessage(), 423);
         } catch (ValidationException $e) {
-            //return $this->errorResponse($e->error_log(), 422);
+            return $this->errorResponse($e->errors(), 422);
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred while creating the user.', 500);
         }
@@ -147,5 +154,44 @@ class UserController extends ApiController
         $user->delete();
 
         return $this->successResponse($user);
+    }
+
+    public function verify($token)
+    {
+        try {
+            $user = User::where('verification_token', $token)->firstOrFail();
+
+            Log::info("Verify function user object ".json_encode($user));
+            if($user->isEmpty){
+                return $this->errorResponse('There is no user with this token');
+            }
+    
+            $user->verified = User::USUARIO_VERIFICADO;
+            $user->verification_token = null;
+            $user->save();
+    
+            return $this->successResponse('Your account has been verified');
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), 415);
+        }
+    }
+
+    public function resend(User $user)
+    {
+        try {
+            if ($user->esVerificado()) {
+                return $this->errorResponse('This user is already verified', 409);
+            }
+            
+            retry(5, function() use ($user){
+                Mail::to($user)->send(new UserCreated($user));
+            }, 100);
+
+            return $this->successResponse('Verfied mail is already resend', 200);
+            
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }
