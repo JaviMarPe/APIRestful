@@ -18,15 +18,7 @@ class CategoryController extends ApiController
     public function index()
     {
         $category = Category::all();
-        return $this->successResponse($category, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return $this->showAll($category, 200);
     }
 
     /**

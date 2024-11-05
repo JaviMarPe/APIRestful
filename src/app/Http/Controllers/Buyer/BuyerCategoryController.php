@@ -29,6 +29,6 @@ class BuyerCategoryController extends ApiController
             return $this->errorResponse('Not categories found for this Buyer', 404);
         }
 
-        return $this->successResponse($categories, 200);
+        return $this->showAll($categories, 200);
     }
 }

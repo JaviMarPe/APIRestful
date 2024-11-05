@@ -24,6 +24,6 @@ class CategoryTransactionController extends ApiController
             return $this->errorResponse('Not transactions found for this Category', 404);
         }
 
-        return $this->successResponse($transactions, 200);
+        return $this->showAll($transactions, 200);
     }
 }

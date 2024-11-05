@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class TransactionCategoryController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Display a information of transaction and the categories related to transaction
      */
     public function index(Transaction $transaction)
     {
@@ -28,7 +28,7 @@ class TransactionCategoryController extends ApiController
             return $this->errorResponse('No categories found for this product', 404);
         }
 
-        return $this->successResponse($categories, 200);
+        return $this->showAll($categories, 200);
     }
 
 }

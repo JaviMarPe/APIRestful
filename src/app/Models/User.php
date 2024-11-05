@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use App\Transformers\UserTransformer;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,8 @@ class User extends Authenticatable
     const USUARIO_REGULAR = 'false';
 
     protected $table = 'users';
+
+    public $transformer = UserTransformer::class;
 
     /**
      * The attributes that are mass assignable.

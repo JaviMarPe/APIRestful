@@ -14,23 +14,7 @@ class SellerController extends ApiController
     public function index()
     {
         $sellers = Seller::has('products')->get();
-        return $this->successResponse($sellers, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return $this->showAll($sellers, 200);
     }
 
     /**
@@ -39,29 +23,5 @@ class SellerController extends ApiController
     public function show(Seller $seller)
     {
         return response()->json(['data' => $seller], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

@@ -27,7 +27,7 @@ class SellerProductController extends ApiController
             return $this->errorResponse('Not products found for this Seller', 404);
         }
 
-        return $this->successResponse($products, 200);
+        return $this->showAll($products, 200);
     }
 
     /**

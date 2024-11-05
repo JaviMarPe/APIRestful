@@ -21,15 +21,7 @@ class UserController extends ApiController
     public function index()
     {
         $users = User::all();
-        return $this->successResponse($users, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return $this->showAll($users, 200);
     }
 
     /**
@@ -80,15 +72,7 @@ class UserController extends ApiController
     public function show(User $user)
     {
         Log::info('User retrieved', ['user' => $user]);
-        return $this->successResponse($user, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return $this->showOne($user, 200);
     }
 
     /**

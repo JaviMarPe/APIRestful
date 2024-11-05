@@ -28,7 +28,7 @@ class BuyerSellerController extends ApiController
             return $this->errorResponse('Not sellers found for this Buyer', 404);
         }
 
-        return $this->successResponse($sellers, 200);
+        return $this->showAll($sellers, 200);
     }
 
 }

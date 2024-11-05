@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Transformers\TransactionTransformer;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,8 @@ class Transaction extends Model
         'buyer_id',
         'product_id',
     ];
+
+    public $transformer = TransactionTransformer::class;
 
     /**
      * Get the buyer that owns the Transaction

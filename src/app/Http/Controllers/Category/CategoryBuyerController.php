@@ -29,7 +29,7 @@ class CategoryBuyerController extends ApiController
             return $this->errorResponse('Not buyers found for this Category', 404);
         }
 
-        return $this->successResponse($buyers, 200);
+        return $this->showAll($buyers, 200);
     }
 
 }

@@ -2,6 +2,12 @@
 
 namespace App\Traits;
 
+use App\Transformers\UserTransformer;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Spatie\Fractal\Facades\Fractal;
+
 trait ApiResponser
 {
     /**
@@ -39,8 +45,38 @@ trait ApiResponser
         ], $code);
     }
 
-    /*protected  function showAll(Collection $collection, $code = 200)
+    //En este caso se el parametro recibido es una coleccion
+    protected function showAll(Collection $collection, $code = 200)
     {
-        return $this->successResponse([]);
-    }*/
+        Log::info('showAll. model = '.json_encode($collection));
+        if($collection->isEmpty()){
+            return $this->successResponse($collection, $code);
+        }
+        $instance = $collection->first()->transformer;
+        $collection = $this->sortData($collection);
+        $data = $this->transaformData($collection ,$instance);
+        return $this->successResponse($data, $code);
+    }
+
+    protected function showOne(Model $model, $code = 200)
+    {
+        Log::info('showOne. model = '.json_encode($model->transformer));
+        $data = $this->transaformData($model ,$model->transformer);
+        return $this->successResponse($data, $code);
+    }
+
+    protected function sortData(Collection $collection)
+    {
+        //comprobamos si en la peticion se ha enviado una solicitud con el valor de ordenacion
+        if(request()->has('sort_by')){
+            $attribute = request()->sort_by;
+            $sorted = $collection->sortBy($attribute);
+        }
+        return $sorted->values()->all();
+    }
+
+    protected function transaformData($data, $transformer)
+    {
+        return fractal($data, new $transformer)->toArray();
+    }
 }

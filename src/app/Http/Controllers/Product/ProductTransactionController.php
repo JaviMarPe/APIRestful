@@ -19,6 +19,6 @@ class ProductTransactionController extends ApiController
             return $this->errorResponse('No transactions found for this product : '.$product->name, 406);
         }
 
-        return $this->successResponse($transactions, 200);
+        return $this->showAll($transactions, 200);
     }
 }

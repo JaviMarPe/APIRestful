@@ -22,6 +22,6 @@ class BuyerTransactionController extends ApiController
             return $this->errorResponse('No transactions found for this buyer', 404);
         }
 
-        return $this->successResponse($transactions, 200);
+        return $this->showAll($transactions, 200);
     }
 }

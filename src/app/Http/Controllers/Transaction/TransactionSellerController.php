@@ -28,7 +28,7 @@ class TransactionSellerController extends ApiController
             return $this->errorResponse('No seller found for this product', 404);
         }
 
-        return $this->successResponse($seller, 200);
+        return $this->showAll($seller, 200);
     }
 
 }
