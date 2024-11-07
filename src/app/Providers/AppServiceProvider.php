@@ -6,6 +6,8 @@ use App\Mail\UserCreated;
 use App\Mail\UserMailChanged;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +30,17 @@ class AppServiceProvider extends ServiceProvider
     {
         //Este sera el tamaño por defecto de los string debido a la cantida maxima que permite la bbdd
         Schema::defaultStringLength(191);
+        
+        //Añadimos la paginacion de las clecciones en un macro
+        /*Collection::macro('paginate', function ($perPage = 10) {
+            $page = LengthAwarePaginator::resolveCurrentPage('page');
+
+            return new LengthAwarePaginator($this->forPage($page, $perPage), $this->count(), $perPage, $page, [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'query' => request()->query(),
+            ]);
+        });*/
+
 
         //Eventos que saltan cuando se crea un usuario: mandar un email de verificacion, ...
         User::created(function($user){

@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Route;
 use League\Fractal\TransformerAbstract;
 
 class CategoryTransformer extends TransformerAbstract
@@ -39,6 +40,28 @@ class CategoryTransformer extends TransformerAbstract
             'createdDate' => (string)$category->created_at,
             'updatedDate' => (string)$category->update_at,
             'deletedDate' => isset($category->deleted_at) ? (string)$category->deleted_at : null,
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => route('categories.show', $category->id) 
+                ],
+                [
+                    'rel' => 'category.buyers',
+                    'href' => route('categories.buyers.index', ['category' => $category->id]) 
+                ],
+                [
+                    'rel' => 'category.products',
+                    'href' => route('categories.products.index', ['category' => $category->id]) 
+                ],
+                [
+                    'rel' => 'category.sellers',
+                    'href' => route('categories.sellers.index', $category->id) 
+                ],
+                [
+                    'rel' => 'category.transactions',
+                    'href' => route('categories.transactions.index', $category->id) 
+                ],
+            ]
         ];
     }
 
