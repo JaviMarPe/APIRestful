@@ -63,6 +63,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /* Obligamos al atributo name, en el caso de set, siempre en minusculas y al usar get, solo con la primera en mayusculas*/
     protected function name(): Attribute{
         return Attribute::make(
             get: fn (string $value) => ucwords($value),

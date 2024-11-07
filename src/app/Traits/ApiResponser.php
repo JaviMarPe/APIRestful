@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Transformers\UserTransformer;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Spatie\Fractal\Facades\Fractal;
 
@@ -23,7 +24,7 @@ trait ApiResponser
         return response()->json([
             'status' => 'Success',
             'message' => $message,
-            'data' => $data
+            'data' => $data['data'] ?? $data
         ], $code);
     }
  
@@ -48,34 +49,53 @@ trait ApiResponser
     //En este caso se el parametro recibido es una coleccion
     protected function showAll(Collection $collection, $code = 200)
     {
-        Log::info('showAll. model = '.json_encode($collection));
+        //Log::info('showAll. model = '.json_encode($collection));
         if($collection->isEmpty()){
             return $this->successResponse($collection, $code);
         }
+
         $instance = $collection->first()->transformer;
-        $collection = $this->sortData($collection);
-        $data = $this->transaformData($collection ,$instance);
+
+        $collection = $this->filterData($collection, $instance); //filtramos la peticion segund los parametros que se envien
+
+        if(request()->has('sort_by')) $collection = $this->sortData($collection, request()->sort_by, $instance);//ordenamos la peticion
+
+        $data = $this->transformData($collection ,$instance);//
+
         return $this->successResponse($data, $code);
     }
 
     protected function showOne(Model $model, $code = 200)
     {
         Log::info('showOne. model = '.json_encode($model->transformer));
-        $data = $this->transaformData($model ,$model->transformer);
+        $data = $this->transformData($model ,$model->transformer);
         return $this->successResponse($data, $code);
     }
 
-    protected function sortData(Collection $collection)
+    /*En este metodo vamos a filtrar los datos en el caso de que se manden varios parametros de filtrado*/
+    protected function filterData(Collection $collection, $transformer)
+    {
+        Log::info('FilterData query paramters = '.json_encode(request()->query()));
+        foreach (request()->query() as $query => $value) {
+            $attribute = $transformer::originalAttribute($query);//obtenemos el atributo original
+
+            if(isset($attribute, $value)){
+                $collection = $collection->where($attribute, $value);//si existe, hacemos una busqueda con where en la coleccion
+            }
+        }
+
+        return $collection;        
+    }
+
+    protected function sortData(Collection $collection, $attribute, $transformer)
     {
         //comprobamos si en la peticion se ha enviado una solicitud con el valor de ordenacion
-        if(request()->has('sort_by')){
-            $attribute = request()->sort_by;
-            $sorted = $collection->sortBy($attribute);
-        }
+        $attribute = $transformer::originalAttribute(request()->sort_by);
+        $sorted = $collection->sortBy($attribute);
         return $sorted->values()->all();
     }
 
-    protected function transaformData($data, $transformer)
+    protected function transformData($data, $transformer)
     {
         return fractal($data, new $transformer)->toArray();
     }
