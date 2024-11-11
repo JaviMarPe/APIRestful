@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Category;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Category;
+use App\Transformers\CategoryTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,11 @@ use Illuminate\Validation\ValidationException;
 
 class CategoryController extends ApiController
 {
+    public function __construct() 
+    {
+        parent::__construct();
+        $this->middleware('transform.input'.CategoryTransformer::class)->only(['store', 'update']);
+    }
     /**
      * Display a listing of the resource.
      */

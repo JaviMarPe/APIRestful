@@ -22,7 +22,7 @@ class ProductCategoryController extends ApiController
             return $this->errorResponse('No categories found for this product : '.$product->name, 406);
         }
 
-        return $this->showAll($categories, 200);
+        return $this->successResponse($categories, 200);
     }
 
     /**
