@@ -28,8 +28,8 @@ trait ApiResponser
         //Log::info('successResponse data = '.json_encode($data));
         $response = collect([
             'status' => 'Success',
-            'message' => $message]
-        );
+            'message' => $message
+        ]);
         $allResponse = $response->merge($data);
         $allResponse->all();
         return response()->json($allResponse);

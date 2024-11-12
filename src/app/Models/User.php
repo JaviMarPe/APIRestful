@@ -13,10 +13,11 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use App\Transformers\UserTransformer;
+use Laravel\Passport\HasApiTokens as PassportHasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use PassportHasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     const USUARIO_VERIFICADO = '1';
     const USUARIO_NO_VERIFICADO = '0';

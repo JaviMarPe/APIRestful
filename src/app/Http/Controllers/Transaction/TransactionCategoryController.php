@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 class TransactionCategoryController extends ApiController
 {
+    public function __construct() 
+    {
+        $this->middleware('client.credential')->only(['index']);
+    }
     /**
      * Display a information of transaction and the categories related to transaction
      */

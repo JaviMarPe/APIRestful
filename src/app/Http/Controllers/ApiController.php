@@ -12,7 +12,7 @@ class ApiController extends Controller
     /* constructor */
     public function __construct() 
     {
-       
+       $this->middleware('auth:api');
     }
 }
 

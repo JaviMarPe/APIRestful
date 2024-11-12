@@ -93,3 +93,5 @@ Route::post('products/{product}/buyers/{buyer}/transactions', [ProductBuyerTrans
 
 Route::get('users/verify/{token}',  [UserController::class, 'verify'])->name('verify');
 Route::get('users/{user}/resend',  [UserController::class, 'resend'])->name('resend');
+
+Route::post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
