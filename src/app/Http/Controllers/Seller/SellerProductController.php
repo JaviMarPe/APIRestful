@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Exceptions\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
@@ -21,20 +22,24 @@ class SellerProductController extends ApiController
     {
         parent::__construct();
 
-        $this->middleware('transform.input'.ProductTransformer::class)->only(['store', 'update']);
+        $this->middleware('transform.input:'.ProductTransformer::class)->only(['store', 'update']);
+        $this->middleware('scope:manage-product')->except(['index']);
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Seller $seller)
     {
-        $products = $seller->products()->get();
+        if(request()->user()->tokenCan('read-general') || request()->user()->tokenCan('manage-products')){
+            $products = $seller->products()->get();
 
-        if($products->isEmpty()){
-            return $this->errorResponse('Not products found for this Seller', 404);
+            if($products->isEmpty()){
+                return $this->errorResponse('Not products found for this Seller', 404);
+            }
+    
+            return $this->showAll($products, 200);
         }
-
-        return $this->showAll($products, 200);
+        throw new AuthenticationException;   
     }
 
     /**

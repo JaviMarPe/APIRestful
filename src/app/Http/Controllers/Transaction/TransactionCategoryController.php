@@ -12,6 +12,7 @@ class TransactionCategoryController extends ApiController
     public function __construct() 
     {
         $this->middleware('client.credential')->only(['index']);
+        $this->middleware('scope:read-general')->only(['show']);
     }
     /**
      * Display a information of transaction and the categories related to transaction

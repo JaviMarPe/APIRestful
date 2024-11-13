@@ -76,6 +76,8 @@ trait ApiResponser
         //ordenamos la peticion
         if(request()->has('sort_by')) $collection = $this->sortData($collection, request()->sort_by, $transformer);
 
+        //Log::info($collection->dd());
+
         //Paginamos el resultado
         $collection = $this->pagination($collection);
 
@@ -116,7 +118,7 @@ trait ApiResponser
         Log::info('sortData query paramters = '.json_encode(request()->query()));
         $attribute = $transformer::originalAttribute(request()->sort_by);
         $sorted = $collection->sortBy($attribute);
-        return $sorted->values()->all();
+        return $sorted->values();
     }
 
     //paginamos la respuesta de la peticion
