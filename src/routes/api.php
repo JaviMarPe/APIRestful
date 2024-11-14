@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+Route::get('users/me',  [UserController::class, 'me'])->name('me');
+
+
 Route::apiResource('users', 'App\Http\Controllers\User\UserController');
 Route::apiResource('categories', 'App\Http\Controllers\Category\CategoryController');
 Route::apiResource('products', 'App\Http\Controllers\Product\ProductController')->only(['index', 'show']);

@@ -154,6 +154,18 @@ class UserController extends ApiController
         return $this->successResponse($user);
     }
 
+    //Averiguar que usuario esta authenticado
+    public function me(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            return $this->showOne($user);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), 415);
+        }
+    }
+
     public function verify($token)
     {
         try {
