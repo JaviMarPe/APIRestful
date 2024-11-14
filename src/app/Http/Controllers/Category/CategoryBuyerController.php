@@ -17,6 +17,7 @@ class CategoryBuyerController extends ApiController
      */
     public function index(Category $category)
     {
+        $this->allowedAdminGate();
         /*En este caso, al haber varias transacciones dentro de los productor(relacion hasMany) entonces tenemos que hacer primero 
         el pluck de la coleccion de transacciones y luego de buyer*/
         $buyers = $category->products()//comenzamos obteniendo los productos

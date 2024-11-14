@@ -33,6 +33,7 @@ class UserController extends ApiController
      */
     public function index()
     {
+        $this->allowedAdminGate();
         $users = User::all();
         return $this->showAll($users, 200);
     }
@@ -94,7 +95,7 @@ class UserController extends ApiController
     public function update(Request $request, User $user)
     {
         try {
-
+            $this->allowedAdminGate();
             $validator = Validator::make($request->all(), [
                 'email' => ['email', 'unique:users'],
                 'password' => ['min:6', 'confirmed'],

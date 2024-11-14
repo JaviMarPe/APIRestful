@@ -17,6 +17,8 @@ class ProductTransactionController extends ApiController
      */
     public function index(Product $product)
     {
+        $this->allowedAdminGate();
+        
         $transactions = $product->transactions()->get();
 
         if ($transactions->isEmpty()) {

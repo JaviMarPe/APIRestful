@@ -34,6 +34,7 @@ class CategoryController extends ApiController
     public function store(Request $request)
     {
         try {
+            $this->allowedAdminGate();
             //code...
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -79,6 +80,7 @@ class CategoryController extends ApiController
     public function update(Request $request, Category $category)
     {
         try {
+            $this->allowedAdminGate();
 
             $category->fill($request->only([
                 'name',
@@ -107,6 +109,8 @@ class CategoryController extends ApiController
      */
     public function destroy(Category $category)
     {
+        $this->allowedAdminGate();
+        
         $category->delete();
 
         return $this->successResponse($category, 201);

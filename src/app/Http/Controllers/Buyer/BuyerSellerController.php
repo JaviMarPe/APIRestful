@@ -17,6 +17,8 @@ class BuyerSellerController extends ApiController
      */
     public function index(Buyer $buyer)
     {
+        $this->allowedAdminGate();
+        
         if(!$buyer->transactions){
             return $this->errorResponse('This buyer '.$buyer->name.' does not have any transaction', 404);
         }

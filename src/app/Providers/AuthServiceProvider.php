@@ -15,6 +15,7 @@ use App\Policies\SellerPolicy;
 use App\Policies\TransactionPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
@@ -39,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         //Passport::loadKeysFrom(__DIR__.'/storage');
         $this->registerPolicies();
+
+        Gate::define('admin-action', function (User $user) {
+            return $user->esAdministrador();
+        });
 
         Passport::tokensExpireIn(now()->addDays(1));
         Passport::refreshTokensExpireIn(now()->addDays(1));

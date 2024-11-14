@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Buyer;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Buyer;
-use App\Models\Transaction;
-use Illuminate\Http\Request;
 
 class BuyerController extends ApiController
 {
@@ -20,6 +18,7 @@ class BuyerController extends ApiController
      */
     public function index()
     {
+        $this->allowedAdminGate();
         $buyers = Buyer::has('transactions')->get();
         return $this->showAll($buyers, 200);
     }

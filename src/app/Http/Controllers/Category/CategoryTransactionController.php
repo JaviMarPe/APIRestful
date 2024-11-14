@@ -17,6 +17,8 @@ class CategoryTransactionController extends ApiController
      */
     public function index(Category $category)
     {
+        $this->allowedAdminGate();
+        
         $transactions = $category->products()
                 ->whereHas('transactions') //Si los productos no tienen transacciones no sera incluidos en la respuesta
                 ->with('transactions')

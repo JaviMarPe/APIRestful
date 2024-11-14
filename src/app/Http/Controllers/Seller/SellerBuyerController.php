@@ -17,6 +17,8 @@ class SellerBuyerController extends ApiController
      */
     public function index(Seller $seller)
     {
+        $this->allowedAdminGate();
+        
         $buyers = $seller->products()
                     ->whereHas('transactions') //el producto tiene que tener transacciones
                     ->with('transactions.buyer') //queremos la info de las transaccion y los buyers relaciones de esas transacciones
