@@ -13,6 +13,8 @@ class TransactionSellerController extends ApiController
     {
         parent::__construct();
         $this->middleware('scope:read-general')->only(['index']);
+        //policies para restriguir las acciones del comprador a ver el vendedor/detalles de la transaccion de la compra
+        $this->middleware('can:view,transaction')->only(['index']);
     }
     /**
      * Display a listing of the resource.

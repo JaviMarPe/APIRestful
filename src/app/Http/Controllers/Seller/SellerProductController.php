@@ -23,7 +23,13 @@ class SellerProductController extends ApiController
         parent::__construct();
 
         $this->middleware('transform.input:'.ProductTransformer::class)->only(['store', 'update']);
+        //scope passport para dar permisos al usuario de gestionar el producto
         $this->middleware('scope:manage-product')->except(['index']);
+        //policies para restriguir las acciones del seller a los productos
+        $this->middleware('can:view,seller')->only(['index']);
+        $this->middleware('can:sale,seller')->only(['store']);
+        $this->middleware('can:edit-product,seller')->only(['update']);
+        $this->middleware('can:delete-product,seller')->only(['destroy']);
     }
     /**
      * Display a listing of the resource.

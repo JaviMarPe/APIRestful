@@ -12,6 +12,8 @@ class TransactionController extends ApiController
     {
         parent::__construct();
         $this->middleware('scope:read-general')->only(['show']);
+        //policies para restriguir las acciones del comprador o vendedor a sus transacciones
+        $this->middleware('can:view,transaction')->only(['show']);
     }
     /**
      * Display a listing of the resource.

@@ -23,6 +23,10 @@ class UserController extends ApiController
         $this->middleware('transform.input:'.UserTransformer::class)->only(['store', 'update']);
 
         $this->middleware('scope:manage-account')->only(['show', 'update']);
+        //policies para restriguir las acciones del usuario
+        $this->middleware('can:view,user')->only(['show']);
+        $this->middleware('can:update,user')->only(['update']);
+        $this->middleware('can:delete,user')->only(['destroy']);
     }
     /**
      * Display a listing of the resource.
